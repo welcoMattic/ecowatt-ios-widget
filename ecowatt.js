@@ -54,20 +54,18 @@ async function createFourDaysWidget(data) {
     for (let i = 0; i < data.length; i++) {
         let dayData = data[i]
         let date = new Date(Date.parse(dayData.jour))
-        let df = new DateFormatter()
-        df.locale = "fr-FR"
-        df.useMediumDateStyle()
+        date.setHours(0, 0, 0, 0)
         let dateColumn = dataColumn.addStack()
         dateColumn.addSpacer(5)
 
         let todayDate = new Date()
-        let today = [
-            todayDate.getDate().toString().padStart(2, '0'),
-            todayDate.toLocaleString("fr-FR", { month: "short" }),
-            todayDate.getFullYear(),
-        ].join(' ');
-        
-        let wdate = dateColumn.addText(today === df.string(date) ? "Aujourd'hui" : df.string(date))
+        todayDate.setHours(0, 0, 0, 0)
+
+        let wdate = dateColumn.addText(todayDate === date ? "Aujourd'hui" : date.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'short',
+        }))
         wdate.font = Font.body()
         wdate.textColor = Color.white()
         let messageColumn = dateColumn.addStack()
