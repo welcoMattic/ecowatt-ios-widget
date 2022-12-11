@@ -55,17 +55,18 @@ async function createFourDaysWidget(data) {
         let dayData = data[i]
         let date = new Date(Date.parse(dayData.jour))
         let df = new DateFormatter()
-        df.useShortDateStyle()
+        df.locale = "fr-FR"
+        df.useMediumDateStyle()
         let dateColumn = dataColumn.addStack()
         dateColumn.addSpacer(5)
 
         let todayDate = new Date()
         let today = [
             todayDate.getDate().toString().padStart(2, '0'),
-            (todayDate.getMonth() + 1).toString().padStart(2, '0'),
+            todayDate.toLocaleString("fr-FR", { month: "short" }),
             todayDate.getFullYear(),
-        ].join('/');
-
+        ].join(' ');
+        
         let wdate = dateColumn.addText(today === df.string(date) ? "Aujourd'hui" : df.string(date))
         wdate.font = Font.body()
         wdate.textColor = Color.white()
@@ -92,17 +93,18 @@ function createRow(dayData) {
     row.height = 64
     let date = new Date(Date.parse(dayData.jour))
     let df = new DateFormatter()
+    df.locale = "fr-FR"
     df.useMediumDateStyle()
     let messageCell = row.addText(df.string(date), dayData.message)
     messageCell.titleFont = Font.body()
     return row
 }
 async function loadData() {
-    let request = new Request("https://ecowatt.kloude.fr/ecowatt.json")
+    let request = new Request("https://ecowatt-widget.fr/ecowatt.json")
     let json = await request.loadJSON()
     return json['signals']
 }
 async function loadEcoWattLogo() {
-    let request = new Request("https://ecowatt.kloude.fr/ecowatt.png")
+    let request = new Request("https://ecowatt-widget.fr/ecowatt.png")
     return request.loadImage()
 }
